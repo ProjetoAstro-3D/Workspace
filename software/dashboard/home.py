@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from windows.newproject import NewProject
 
 class Dashboard(tk.Tk):
     def __init__(self):
@@ -7,6 +8,12 @@ class Dashboard(tk.Tk):
         self.title("Dashboard")
         self.geometry("800x600")
         self.create_widgets()
+    
+    def new_project(self):
+            root = tk.Tk()
+            root.withdraw()  # Hide the main window
+            new_project_window = NewProject(root)
+            new_project_window.mainloop()
 
     def create_widgets(self):
         container = tk.Frame(self, bg="#d1d1d1")
@@ -28,12 +35,12 @@ class Dashboard(tk.Tk):
         # Add a label to the dashboard.aside
         label = ttk.Label(frame_aside, text="Projeto Astro", font=("Helvetica", 18), style="Titulo.TLabel").pack(anchor=tk.NW, padx=20, pady=20)
         # Add a button to the dashboard.aside.menu
-        button_newProject = ttk.Button(frame_menu, text="New Project", padding=(20, 3)).pack(anchor=tk.W, padx=20, pady=20)
+        button_newProject = ttk.Button(frame_menu, text="New Project", padding=(20, 3), command=self.new_project).pack(anchor=tk.W, padx=20, pady=20)
         button_openProject = ttk.Button(frame_menu, text="Open Project", padding=(20, 3)).pack(anchor=tk.W, padx=20, pady=20)
         button_settings = ttk.Button(frame_menu, text="Settings", padding=(20, 3)).pack(anchor=tk.W, padx=20, pady=20)
         button_exit = ttk.Button(frame_menu, text="Exit", command=self.quit, padding=(20, 3)).pack(anchor=tk.W, padx=20, pady=20)
 
-
+        
 if __name__ == "__main__":
     app = Dashboard()
     app.mainloop()
