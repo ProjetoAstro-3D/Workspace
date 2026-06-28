@@ -5,6 +5,7 @@ from source.Astro_Builder import AstroBuilder
 class NewProject(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
+        self.parent = parent
         self.title("New Project")
         self.geometry("600x500")
         self.resizable(False, False)
@@ -87,8 +88,11 @@ class NewProject(tk.Toplevel):
         )
 
         project.init_builder()
-        self.destroy()
 
+        self.parent.create_dashboardFolder()
+
+        self.destroy()
+        
 if __name__ == "__main__":
     root = tk.Tk()
     root.withdraw()  # Hide the main window
