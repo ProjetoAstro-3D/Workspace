@@ -1,0 +1,22 @@
+{
+    "geral": {
+        "ImpressoraCad": "Default",
+        "Tema": "dark"
+    },
+    "color": {
+        "Tema": {
+            "light": {
+                "bg-CorPrincipal": "#ffffff",
+                "bg-CorSecundaria": "#ebebeb",
+                "font-geral": "#000000",
+                "botton": "#4d4dcb"
+            },
+            "dark": {
+                "bg-CorPrincipal": "#0f0f0f",
+                "bg-CorSecundaria": "#242424",
+                "font-geral": "#ffffff",
+                "botton": "#0d0d26"
+            }
+        }
+    }
+}
