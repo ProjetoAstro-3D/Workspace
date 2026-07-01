@@ -1,12 +1,32 @@
 import tkinter as tk
 from tkinter import ttk
 from source.Astro_ConfigManager import ConfigManager
+from source.Astro_ReaderProjDir import ReaderDirP
 
 class ShowProjects(tk.Frame):
     def __init__(self, master, name):
         super().__init__(master)
+
         self.config = ConfigManager()
         self.nameProject = name
+        self.txtDir = ReaderDirP(self.nameProject)
+        self.style = ttk.Style()
+
+        self.style.theme_use("clam")
+        self.style.configure(
+            "Explorer.Treeview",
+            background=self.config.json_tema["bg-CorSecundaria"],
+            foreground=self.config.json_tema["font-geral"],
+            fieldbackground=self.config.json_tema["bg-CorSecundaria"],
+            borderwidth=0
+        )
+
+        self.style.map(
+            "Explorer.Treeview",
+            background=[("selected", "#388eff")],
+            foreground=[("selected", "white")],
+            fieldbackground=self.config.json_tema["bg-CorSecundaria"],
+        )
 
         self.create_widget()
     
@@ -66,6 +86,39 @@ class ShowProjects(tk.Frame):
             rely=0.2
         )
 
+    def asideDir(self):
+
+        tree = ttk.Treeview(
+            self.frameFolder,
+            show="tree",
+            style = "Explorer.Treeview"
+        )
+
+        tree.pack(
+            fill="both",
+            expand=True,
+            anchor="w"
+        )
+
+        for var in self.txtDir.txtDir.iterdir():
+
+            # Insere a pasta ou arquivo principal
+            parent = tree.insert(
+                "",
+                "end",
+                text=var.name,
+                open=True
+            )
+
+            # Se for uma pasta, insere seus arquivos
+            if var.is_dir():
+                for item in var.iterdir():
+                    tree.insert(
+                        parent,
+                        "end",
+                        text=item.name
+                    )
+
     def create_widget(self):
 
         self.frameFun()
@@ -87,6 +140,12 @@ class ShowProjects(tk.Frame):
             foreground = self.config.json_tema["font-geral"],
             background = self.config.json_tema["bg-CorPrincipal"]
         )
+        self.label_folder = tk.Label(
+            self.frameFolder,
+            text = f"Folder/{self.nameProject}",
+            foreground = self.config.json_tema["font-geral"],
+            background = self.config.json_tema["bg-CorSecundaria"]
+        )
 
         self.botton_close.pack(
             anchor = tk.NW,
@@ -94,13 +153,19 @@ class ShowProjects(tk.Frame):
             pady = 5,
             padx = 5
         )
+        
         self.label_NameProject.pack(
             anchor = tk.NW,
             side=tk.LEFT,
             pady = 5,
             padx = 5
         )
-
+        self.label_folder.pack(
+            anchor = "w",
+            side = "top"
+            )
+        
+        self.asideDir()
+        
     def close(self):
         self.master.show_home()
-
