@@ -1,93 +1,19 @@
-import tkinter as tk
 import os
-import json
-from pathlib import Path
+import tkinter as tk
 from tkinter import ttk
+from pathlib import Path
 from windows.newproject import NewProject
 from source.Astro_ConfigManager import ConfigManager
 
-class Dashboard(tk.Tk):
-    def __init__(self):
-        super().__init__()
-        self.title("Dashboard")
-        self.geometry("800x600")
-        self.frame = None
-    
+class ShowHome(tk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
         self.path_projects = os.path.join(os.getcwd(), "./software/data")
         self.config = ConfigManager()
 
-        self.load_projects()
-        self.create_widgets()
-        
-
-    def clear(self):
-        if self.frame:
-            self.frame.destroy()
-
-    def load_projects(self):
-        self.load = Path(self.path_projects)
-    
-    def new_project(self):
-        NewProject(self)
-
-
-    def showConfig(self):
-        self.clear()
-        self.frame = ttk.Frame(self)
-        self.frame_Bg = tk.Frame(self.frame, bg=self.config.json_tema["bg-CorPrincipal"])
-        self.frame_tema = tk.Frame(self.frame_Bg, bg=self.config.json_tema["bg-CorPrincipal"], width=200, height=30)
-
-        self.frame.pack(fill="both", expand=True)   
-        self.frame_Bg.pack(fill="both", expand=True)  
-        self.frame_tema.pack(side=tk.RIGHT, padx=10, pady=10) 
-        self.frame_tema.pack_propagate(False)
-
-        self.botton_undo = tk.Button(
-            self.frame_Bg, text="Home", 
-            command=self.create_widgets,
-            foreground= self.config.json_tema["font-geral"],
-            background=self.config.json_tema["botton"]
-            ).pack(anchor=tk.SW)
-        #Option menu:
-        #Opções
-        list_Temas = ["light", "dark"]
-        self.list_TemasDefault = tk.StringVar(self.frame_tema)
-        self.list_TemasDefault.set(self.config.config["geral"]["Tema"])
-
-        label_temaOp = tk.Label(
-            self.frame_tema, text="Tema:", 
-            bg=self.config.json_tema["bg-CorPrincipal"], 
-            fg=self.config.json_tema["font-geral"])
-        OpMenu_Tema = tk.OptionMenu(
-            self.frame_tema, 
-            self.list_TemasDefault, 
-            *list_Temas)
-        
-        OpMenu_Tema.config(
-            foreground= self.config.json_tema["font-geral"],
-            background= self.config.json_tema["botton"]
-        )
-
-        label_temaOp.pack(anchor=tk.E, side=tk.LEFT)
-        OpMenu_Tema.pack(anchor=tk.E, side=tk.LEFT, fill='both', expand=True)
-
-        btn_saveConfig = tk.Button(
-            self.frame_Bg, 
-            text="Salvar Configurações", 
-            command=self.btmSaveConfig,
-            foreground= self.config.json_tema["font-geral"],
-            background= self.config.json_tema["botton"])
-        btn_saveConfig.pack(anchor="s")
-
-    def btmSaveConfig(self):    
-
-        self.config.set_tema(tema = self.list_TemasDefault.get())
-
         self.create_widgets()
 
-    
     def create_widgets(self):
-        self.clear()
         self.frame = ttk.Frame(self)
         self.frame.pack(fill="both", expand=True)
 
@@ -133,7 +59,7 @@ class Dashboard(tk.Tk):
         self.button_settings = tk.Button(
             self.frame_menu,
             text="Settings",
-            command=self.showConfig,
+            command=self.master.show_config,
             foreground= self.config.json_tema["font-geral"],
             width=50,
             background= self.config.json_tema["botton"]
@@ -163,11 +89,13 @@ class Dashboard(tk.Tk):
                     text=project.name,
                     foreground= self.config.json_tema["font-geral"],
                     width=50,
-                    background=self.config.json_tema["botton"]
+                    background=self.config.json_tema["botton"],
+                    command = lambda name=project.name: self.master.show_project(name)
                 )
                 button.pack(fill=tk.X, padx=10, pady=5)
-            
-
-if __name__ == "__main__":
-    app = Dashboard()
-    app.mainloop()
+    
+    def load_projects(self):
+        self.load = Path(self.path_projects)
+    
+    def new_project(self):
+        NewProject(self)
