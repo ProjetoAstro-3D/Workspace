@@ -1,6 +1,12 @@
+import re
 import tkinter as tk
+from typing import Literal
 from tkinter import ttk
 from source.Astro_Builder import AstroBuilder
+from source.Astro_ConfigManager import ConfigManager
+
+def validate(text: str) -> bool:
+    return text == "" or all(c.isalnum() or c in " -" for c in text)
 
 class NewProject(tk.Toplevel):
     def __init__(self, parent):
@@ -24,11 +30,12 @@ class NewProject(tk.Toplevel):
         
 
         vcmd = (self.register(self.validate_number), "%P")
+        vcm = (self.register(validate), "%P")
         frame_leftSide = tk.Frame(self)
         frame_leftSide.pack(side=tk.LEFT, fill=tk.Y)
 
         label_name = ttk.Label(frame_leftSide, text="Project Name:").pack(anchor=tk.W,pady=10, padx = 10)
-        self.entry_name = ttk.Entry(frame_leftSide, width= 40)
+        self.entry_name = ttk.Entry(frame_leftSide, width= 40, validate="key",validatecommand=vcm)
         self.entry_name.pack(anchor=tk.W,pady=5, padx = 10)
 
         label_description = ttk.Label(frame_leftSide, text="Project Description:").pack(anchor=tk.W,pady=10, padx = 10)
@@ -93,8 +100,65 @@ class NewProject(tk.Toplevel):
 
         self.destroy()
         
+
+class Alterar(tk.Toplevel):
+    def __init__(self, parent, controller,condicional: Literal["name"], name):
+        super().__init__(parent)
+        self.parent = parent
+        self.controller = controller
+        self.name = name
+        self.resizable(False, False)
+        self.configManager = ConfigManager(name)
+
+        self.condicional = condicional
+    def save_name(self):
+        arrg = self.input.get()
+        self.configManager.set_name(arrg)
+        self.controller.PainelConfig.show(arrg)
+        self.destroy()
+
+    def altName(self):
+        vcmd = (self.register(validate), "%P")
+        self.title("Alterar nome")
+        self.geometry("400x200")
+        self.label = tk.Label(
+            self,
+            text="Novo nome:"
+        )
+        self.input = tk.Entry(
+            self,
+            width= 30,
+            validate="key",
+            validatecommand=vcmd
+        )
+        self.button = tk.Button(
+            self,
+            text="Salvar",
+            width=10,
+            command = self.save_name
+        )
+        self.label.pack(
+            side='left', 
+            anchor="center",
+            padx=2
+            )
+        self.input.pack(
+            side='left', 
+            anchor="center",
+            padx=2
+            )
+        self.button.pack(
+            side='left', 
+            anchor="center",
+            padx=5
+            )
+
+    def make(self):
+        if self.condicional == "name":
+            self.altName()
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.withdraw()  # Hide the main window
-    new_project_window = NewProject(root)
+    new_project_window = Alterar(root, 'name')
     new_project_window.mainloop()

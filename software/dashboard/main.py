@@ -26,8 +26,8 @@ class Dashboard(tk.Tk):
     def show_config(self):
         self.change_screen(ShowConfig)
 
-    def show_project(self, name):
-        self.change_screen(ShowProjects, name)
+    def show_project(self, name, path):
+        self.change_screen(ShowProjects, name, path)
 
 
 if __name__ == "__main__":

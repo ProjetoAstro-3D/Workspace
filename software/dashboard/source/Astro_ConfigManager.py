@@ -1,8 +1,9 @@
 import os
 import json
 
+
 class ConfigManager:
-    def __init__(self):
+    def __init__(self, project):
 
         """
             Gerencia as configurações globais do software.
@@ -20,7 +21,10 @@ class ConfigManager:
 
         #Variaveis:
 
-        self.config_dir = os.path.join(os.getcwd(), "./software/dashboard/config")
+        self.project = project
+
+        self.config_defaltDir = os.path.join(os.getcwd(), "./software/dashboard/config")
+        self.config_projDir = self.__source_proj()
         self.config = None
         self.json_tema = None
 
@@ -28,11 +32,21 @@ class ConfigManager:
 
         self.__load()
 
+    def __source_proj(self):
+        if not self.project:
+            return None
+
+        return os.path.join(os.getcwd(), f"./software/data/{self.project}")
+
     def __load(self):
-        with open(f"{self.config_dir}/default.json", "r") as read:
+        with open(f"{self.config_defaltDir}/default.json", "r") as read:
             
             self.config = json.load(read)
             self.json_tema = self.config["color"]["Tema"][self.config["geral"]["Tema"]]
+        if self.config_projDir != None:
+            self.config_projDir = self.__source_proj()
+            with open(f"{self.config_projDir}/config.json", "r") as read:
+                self.config_proj = json.load(read)
 
     def set_tema(self, tema):
         
@@ -49,5 +63,21 @@ class ConfigManager:
             if lastConfig["geral"]["Tema"] != tema and lastConfig["geral"]["Tema"] == "dark":   
                 lastConfig["geral"]["Tema"] = "light"
                 json.dump(lastConfig, file, indent=4)
-
+        
         self.__load()
+
+    def set_name(self, name):
+        if self.config_projDir != None:
+            lastConfig = self.config_proj
+
+            if lastConfig["project_name"] == name:
+                return 0
+            
+            with open(f"{self.config_projDir}/config.json", "w") as file:
+                
+                lastConfig["project_name"] = name
+                json.dump(lastConfig, file, indent=4)
+
+            os.rename(f"./software/data/{self.project}", f"./software/data/{name}")
+            self.project = name
+            self.__load()

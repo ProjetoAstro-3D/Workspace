@@ -7,16 +7,16 @@ from windows.frame.Workspace_models import PainelModels
 from windows.frame.Workspace_run import PainelRun   
 
 class ShowProjects(tk.Frame):
-    def __init__(self, master, name):
+    def __init__(self, master, name, path):
         super().__init__(master)
-        self.config = ConfigManager()
+        self.config = ConfigManager(None)
         self.nameProject = name
         self.txtDir = ReaderDirP(self.nameProject)
         self.style = ttk.Style()
         
         self.frames()
-        self.PainelConfig = PainelConfig(self.frameWorkspace)
-        self.PainelModels = PainelModels(self.frameWorkspace)
+        self.PainelConfig = PainelConfig(self.frameWorkspace, self)
+        self.PainelModels = PainelModels(self.frameWorkspace, self, path)
         self.PainelRun = PainelRun(self.frameWorkspace)
 
         self.style.theme_use("clam")
@@ -92,7 +92,7 @@ class ShowProjects(tk.Frame):
         self.Btt_ConfigPainel = tk.Button(
             self.frame_tools,
             text = "Config",
-            command = self.PainelConfig.show
+            command = lambda: self.PainelConfig.show(self.nameProject)
             )
         self.Btt_ConfigPainel.pack(
             side = "right",
@@ -102,7 +102,7 @@ class ShowProjects(tk.Frame):
         self.Btt_ModelsPainel = tk.Button(
             self.frame_tools,
             text = "models",
-            command = self.PainelModels.show
+            command=self.PainelModels.show
         )
         self.Btt_ModelsPainel.pack(
             side = "right",
@@ -166,12 +166,6 @@ class ShowProjects(tk.Frame):
             command = self.close
         )
 
-        self.label_NameProject = tk.Label(
-            self.frame,
-            text = self.nameProject,
-            foreground = self.config.json_tema["font-geral"],
-            background = self.config.json_tema["bg-CorPrincipal"]
-        )
         self.label_folder = tk.Label(
             self.frameFolder,
             text = f"Folder/{self.nameProject}",
@@ -185,13 +179,7 @@ class ShowProjects(tk.Frame):
             pady = 5,
             padx = 5
         )
-        
-        self.label_NameProject.pack(
-            anchor = tk.NW,
-            side=tk.LEFT,
-            pady = 5,
-            padx = 5
-        )
+
         self.label_folder.pack(
             anchor = "w",
             side = "top"

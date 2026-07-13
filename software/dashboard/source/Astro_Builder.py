@@ -20,8 +20,9 @@ class AstroBuilder:
 
         def build(self):
               os.makedirs(self.__project_path, mode=0o777, exist_ok=False)
-              os.makedirs(os.path.join(self.__project_path, "models"), mode=0o777, exist_ok=False)
-              os.makedirs(os.path.join(self.__project_path, "slices"), mode=0o777, exist_ok=False)
+              os.makedirs(os.path.join(self.__project_path, "craftModels"), mode=0o777, exist_ok=False)
+              os.makedirs(os.path.join(f"{self.__project_path}/craftModels", "slices"), mode=0o777, exist_ok=False)
+              os.makedirs(os.path.join(f"{self.__project_path}/craftModels", "Models"), mode=0o777, exist_ok=False)
 
         def save_project(self):
             project_config = {

@@ -2,14 +2,14 @@ import os
 import tkinter as tk
 from tkinter import ttk
 from pathlib import Path
-from windows.newproject import NewProject
+from windows.frame.newWindow import NewProject
 from source.Astro_ConfigManager import ConfigManager
 
 class ShowHome(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
         self.path_projects = os.path.join(os.getcwd(), "./software/data")
-        self.config = ConfigManager()
+        self.config = ConfigManager(False)
 
         self.create_widgets()
 
@@ -90,7 +90,7 @@ class ShowHome(tk.Frame):
                     foreground= self.config.json_tema["font-geral"],
                     width=50,
                     background=self.config.json_tema["botton"],
-                    command = lambda name=project.name: self.master.show_project(name)
+                    command=lambda name=project.name, path=project: self.master.show_project(name, path)
                 )
                 button.pack(fill=tk.X, padx=10, pady=5)
     
