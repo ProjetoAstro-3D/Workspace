@@ -5,7 +5,7 @@ from source.Astro_ConfigManager import ConfigManager
 class ShowConfig(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
-        self.config = ConfigManager()
+        self.config = ConfigManager(None)
 
         self.create_widgets()
 

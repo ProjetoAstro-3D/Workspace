@@ -55,7 +55,7 @@ class ConfigManager:
         if lastConfig["geral"]["Tema"] == tema:
             return 0
         
-        with open(f"{self.config_dir}/default.json", "w") as file:
+        with open(f"{self.config_defaltDir}/default.json", "w") as file:
             if lastConfig["geral"]["Tema"] != tema and lastConfig["geral"]["Tema"] == "light":   
                 lastConfig["geral"]["Tema"] = "dark"
                 json.dump(lastConfig, file, indent=4)

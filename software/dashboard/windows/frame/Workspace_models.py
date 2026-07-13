@@ -38,22 +38,45 @@ class PainelModels(tk.Frame):
 
     def create_widgets(self):
         self.closeWS()
+
+        ################################ LAYOUT #####################################
        
         self.layoutProj = tk.Frame(self.master)
         self.layoutProj.pack(side="left", anchor="nw", fill="x", expand=True)
+
         self.layoutTitlerModelProj = tk.Frame(self.layoutProj)
         self.layoutTitlerModelProj.pack(fill="x", side="top")
+
         self.LayoutListModels = tk.Frame(self.layoutTitlerModelProj)
         self.LayoutListModels.pack(fill="x", side="bottom")
 
-        self.listModels()
+        self.layoutTitlerSlicer = tk.Frame(self.layoutProj)
+        self.layoutTitlerSlicer.pack(fill="x", side="top")
 
-        labelTitlerModelProj = tk.Label(self.layoutTitlerModelProj, text = "Modelos")
+        self.layoutBodySlicer = tk.Frame(self.layoutTitlerSlicer)
+        self.layoutBodySlicer.pack(fill="x", side="bottom")
+
+
+        ################################ LABEL #####################################
+
+        labelTitlerModelProj = tk.Label(self.layoutTitlerModelProj, text = "MODELOS")
         labelTitlerModelProj.pack(side="left", padx = 15)
+
+        labelTitleSlice = tk.Label(self.layoutTitlerSlicer, text="SLICER [GCODE]")
+        labelTitleSlice.pack(side="left", padx = 15, pady = (50, 0))
+
+        ################################ BUTTON #####################################
 
         ButtonUpload = tk.Button(self.layoutTitlerModelProj, text = "Upload", command= self.Upload)
         ButtonUpload.pack(side="right", padx = 15)
 
+        ButtonTableSlicerAcess = tk.Button(self.layoutBodySlicer, text = "[RENDER]", width = 10, height = 5)
+        ButtonTableSlicerAcess.pack(side = "left", padx = 15, pady = 10)
+
+        ################################ FUNÇÕES #####################################
+
+        self.listModels()
+        
 
     def listModels(self):
         for widget in self.LayoutListModels.winfo_children():
