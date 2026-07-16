@@ -5,6 +5,7 @@ from source.object import Object3D
 from source.shader import Shader
 from source.render import Renderer
 from source.cam import Camera as Cam
+from source.cameraControler import Cam_Controler
 from primitives.bed import Plane
 from primitives.grid import Grid
 
@@ -49,11 +50,16 @@ class CallWindow():
         self.grid_shader = Shader("grid_Vshader.glsl", "grid_Fshader.glsl")
         self.grid_obj = Object3D(self.grid_mesh, self.grid_shader)
         self.renderer_grid = Renderer()
-        self.shader_grid = self.bed_shader
+        self.shader_grid = self.grid_shader
 
         self.shader_bed.use()
 
         self.cam = Cam()
+        self.cam_controller = Cam_Controler(self.window, self.cam)
+        glfw.set_cursor_pos_callback(
+            self.window,
+            self.cam_controller.cursor_callback
+        )
 
     def __close(self):
 
@@ -73,13 +79,25 @@ class CallWindow():
 
             glfw.poll_events()
 
+            self.cam_controller.process_input()
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             
+            # Bed
+            self.shader_bed.use()
             self.shader_bed.set_mat4("model", self.cam.model)
             self.shader_bed.set_mat4("view", self.cam.view)
             self.shader_bed.set_mat4("projection", self.cam.projection)
 
             self.renderer_bed.draw(self.bed_obj)
+
+
+            # Grid
+            self.shader_grid.use()
+            self.shader_grid.set_mat4("model", self.cam.model)
+            self.shader_grid.set_mat4("view", self.cam.view)
+            self.shader_grid.set_mat4("projection", self.cam.projection)
+
             self.renderer_grid.draw(self.grid_obj)
 
             glfw.swap_buffers(self.window)
