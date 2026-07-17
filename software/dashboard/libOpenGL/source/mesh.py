@@ -21,6 +21,36 @@ class Mesh():
 
         self.build_VBO()
 
+    def normal(self, normals):
+
+        self.normals = normals
+        self.normals_count = len(normals)
+
+        glBindVertexArray(self.id_vertexArrayObject)
+
+        self.normal_vbo = glGenBuffers(1)
+        glBindBuffer(GL_ARRAY_BUFFER, self.normal_vbo)
+
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            self.normals.nbytes,
+            self.normals,
+            GL_STATIC_DRAW
+            )
+        
+        glVertexAttribPointer(
+            1,
+            3,
+            GL_FLOAT,
+            GL_FALSE,
+            0,
+            None
+        )
+
+        glEnableVertexAttribArray(1)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+        glBindVertexArray(0)
+
     def build_VBO(self):
         
 
@@ -54,6 +84,7 @@ class Mesh():
             self.stride,        #quantidade de bytes entre cada valores
             ctypes.c_void_p(0)  #informando que é para começar no indice - 0
         )
+
 
         glEnableVertexAttribArray(0)
         glBindBuffer(GL_ARRAY_BUFFER, 0)

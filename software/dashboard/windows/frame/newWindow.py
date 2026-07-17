@@ -2,8 +2,8 @@ import re
 import tkinter as tk
 from typing import Literal
 from tkinter import ttk
-from source.Astro_Builder import AstroBuilder
-from source.Astro_ConfigManager import ConfigManager
+from dashboard.source.Astro_Builder import AstroBuilder
+from dashboard.source.Astro_ConfigManager import ConfigManager
 
 def validate(text: str) -> bool:
     return text == "" or all(c.isalnum() or c in " -" for c in text)

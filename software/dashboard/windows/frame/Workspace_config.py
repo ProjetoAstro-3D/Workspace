@@ -2,7 +2,7 @@ import os
 import json
 import tkinter as tk
 from tkinter import ttk
-from windows.frame.newWindow import Alterar
+from dashboard.windows.frame.newWindow import Alterar
 
 class PainelConfig(tk.Frame):
     def __init__(self, master, controller):

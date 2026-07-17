@@ -2,8 +2,8 @@ import os
 import tkinter as tk
 from tkinter import ttk
 from pathlib import Path
-from windows.frame.newWindow import NewProject
-from source.Astro_ConfigManager import ConfigManager
+from dashboard.windows.frame.newWindow import NewProject
+from dashboard.source.Astro_ConfigManager import ConfigManager
 
 class ShowHome(tk.Frame):
     def __init__(self, master):

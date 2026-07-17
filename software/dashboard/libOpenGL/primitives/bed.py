@@ -1,6 +1,6 @@
 import numpy as np
 from OpenGL.GL import *
-from source.mesh import Mesh
+from dashboard.libOpenGL.source.mesh import Mesh
 
 
 class Plane:

@@ -1,8 +1,9 @@
 import tkinter as tk
 import json
 from pathlib import Path
-from source.upload import UploadModel
-from tkinter import ttk
+from dashboard.source.upload import UploadModel
+from multiprocessing import Process, Queue
+from dashboard.libOpenGL.buildOpenGl import buildOpenGL
 
 class PainelModels(tk.Frame):
     def __init__(self, master, controller, path):
@@ -11,6 +12,15 @@ class PainelModels(tk.Frame):
         self.path = path
         self.upModels = UploadModel()
         self.controller = controller
+        self.queue = Queue()
+
+    def runOpenGL(self):
+        print("1")
+        self.process = Process(
+            target = buildOpenGL,
+            args = (self.queue,)
+        )
+        self.process.start()
         
     def Upload(self):
         arq = self.upModels.upload(self.pathModels)
@@ -70,7 +80,7 @@ class PainelModels(tk.Frame):
         ButtonUpload = tk.Button(self.layoutTitlerModelProj, text = "Upload", command= self.Upload)
         ButtonUpload.pack(side="right", padx = 15)
 
-        ButtonTableSlicerAcess = tk.Button(self.layoutBodySlicer, text = "[RENDER]", width = 10, height = 5)
+        ButtonTableSlicerAcess = tk.Button(self.layoutBodySlicer, text = "[RENDER]", width = 10, height = 5, command=self.runOpenGL)
         ButtonTableSlicerAcess.pack(side = "left", padx = 15, pady = 10)
 
         ################################ FUNÇÕES #####################################

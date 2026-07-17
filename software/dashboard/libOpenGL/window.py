@@ -1,13 +1,15 @@
 import glfw
 import glm
 from OpenGL.GL import *
-from source.object import Object3D
-from source.shader import Shader
-from source.render import Renderer
-from source.cam import Camera as Cam
-from source.cameraControler import Cam_Controler
-from primitives.bed import Plane
-from primitives.grid import Grid
+from dashboard.libOpenGL.source.object import Object3D
+from dashboard.libOpenGL.source.shader import Shader
+from dashboard.libOpenGL.source.render import Renderer
+from dashboard.libOpenGL.source.cam import Camera as Cam
+from dashboard.libOpenGL.source.cameraControler import Cam_Controler
+from dashboard.libOpenGL.source.ObjModel3D import Obj3D
+from dashboard.libOpenGL.source.readerObj3D import STLreader
+from dashboard.libOpenGL.primitives.bed import Plane
+from dashboard.libOpenGL.primitives.grid import Grid
 
 
 class CallWindow():
@@ -52,7 +54,12 @@ class CallWindow():
         self.renderer_grid = Renderer()
         self.shader_grid = self.grid_shader
 
-        self.shader_bed.use()
+        self.modelShader = Shader("default_Vshader.glsl", "default_Fshader.glsl")
+
+        self.modelSTL = STLreader()
+        self.modelSTL.load("C:\\Users\\henri\\OneDrive\\Desktop\\Rik2m6\\Workspace\\software\\data\\dev teste/craftModels/Models\\organizer.stl")
+
+        self.ModelImport = Obj3D(self.modelShader, self.modelSTL, Renderer())
 
         self.cam = Cam()
         self.cam_controller = Cam_Controler(self.window, self.cam)
@@ -99,6 +106,9 @@ class CallWindow():
             self.shader_grid.set_mat4("projection", self.cam.projection)
 
             self.renderer_grid.draw(self.grid_obj)
+
+            #Model
+            self.ModelImport.build(self.cam.model, self.cam.view, self.cam.projection)
 
             glfw.swap_buffers(self.window)
 
