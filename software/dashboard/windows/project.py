@@ -1,16 +1,23 @@
 import tkinter as tk
 from tkinter import ttk
-from source.Astro_ConfigManager import ConfigManager
-from source.Astro_ReaderProjDir import ReaderDirP
+from dashboard.source.Astro_ConfigManager import ConfigManager
+from dashboard.source.Astro_ReaderProjDir import ReaderDirP
+from dashboard.windows.frame.Workspace_config import PainelConfig
+from dashboard.windows.frame.Workspace_models import PainelModels
+from dashboard.windows.frame.Workspace_run import PainelRun   
 
 class ShowProjects(tk.Frame):
-    def __init__(self, master, name):
+    def __init__(self, master, name, path):
         super().__init__(master)
-
-        self.config = ConfigManager()
+        self.config = ConfigManager(None)
         self.nameProject = name
         self.txtDir = ReaderDirP(self.nameProject)
         self.style = ttk.Style()
+        
+        self.frames()
+        self.PainelConfig = PainelConfig(self.frameWorkspace, self)
+        self.PainelModels = PainelModels(self.frameWorkspace, self, path)
+        self.PainelRun = PainelRun(self.frameWorkspace)
 
         self.style.theme_use("clam")
         self.style.configure(
@@ -29,36 +36,31 @@ class ShowProjects(tk.Frame):
         )
 
         self.create_widget()
-    
-    def frameFun(self):
+
+    def frames(self):
 
         self.frame = tk.Frame(
             self,
             bg = self.config.json_tema["bg-CorPrincipal"]
             )
-        self.frame.pack(fill="both", expand=True)
 
-    def frameToolsFun(self):
-        
+        self.frameWorkspace = tk.Frame(
+            self.frame,
+            background = self.config.json_tema["bg-CorSecundaria"]
+        )
         self.frame_tools = tk.Frame(
             self.frame,
             background = self.config.json_tema["bg-CorSecundaria"]
             )
-        self.frame_tools.pack(
-            side = "bottom"
-            )
-        self.frame_tools.place(
-            relheight = 0.12,
-            relwidth = 0.98,
-            relx=0.01, 
-            rely=0.07
-        )
-
-    def frameFolderDirFun(self):
-
+        
         self.frameFolder = tk.Frame(
             self.frame,
             background = self.config.json_tema["bg-CorSecundaria"]
+        )
+
+        self.frame.pack(fill="both", expand=True)
+        self.frameWorkspace.pack(
+            side = "left"
         )
         self.frameFolder.pack(
             side = "left"
@@ -69,22 +71,56 @@ class ShowProjects(tk.Frame):
             relx=0.01, 
             rely=0.2
         )
-
-    def frameWorkspaceFun(self):
-
-        self.frameWorkspace = tk.Frame(
-            self.frame,
-            background = self.config.json_tema["bg-CorSecundaria"]
-        )
-        self.frameWorkspace.pack(
-            side = "left"
-        )
         self.frameWorkspace.place(
             relheight = 0.75,
             relwidth = 0.75,
             relx=0.24, 
             rely=0.2
         )
+        self.frame_tools.pack(
+            side = "bottom"
+            )
+        self.frame_tools.place(
+            relheight = 0.12,
+            relwidth = 0.98,
+            relx=0.01, 
+            rely=0.07
+        )
+
+    def ToolsFunction(self):
+        
+        self.Btt_ConfigPainel = tk.Button(
+            self.frame_tools,
+            text = "Config",
+            command = lambda: self.PainelConfig.show(self.nameProject)
+            )
+        self.Btt_ConfigPainel.pack(
+            side = "right",
+            anchor = "center",
+            padx = 5
+        )
+        self.Btt_ModelsPainel = tk.Button(
+            self.frame_tools,
+            text = "models",
+            command=self.PainelModels.show
+        )
+        self.Btt_ModelsPainel.pack(
+            side = "right",
+            anchor = "center",
+            padx = 5
+        )
+        
+        self.Btt_RunPainel= tk.Button(
+            self.frame_tools,
+            text = "run",
+            command = self.PainelRun.show
+        )
+        self.Btt_RunPainel.pack(
+            side = "right",
+            anchor = "center",
+            padx = 5
+        )
+
 
     def asideDir(self):
 
@@ -119,12 +155,8 @@ class ShowProjects(tk.Frame):
                         text=item.name
                     )
 
-    def create_widget(self):
 
-        self.frameFun()
-        self.frameToolsFun()
-        self.frameFolderDirFun()
-        self.frameWorkspaceFun()
+    def create_widget(self):
 
         self.botton_close = tk.Button(
             self.frame,
@@ -134,12 +166,6 @@ class ShowProjects(tk.Frame):
             command = self.close
         )
 
-        self.label_NameProject = tk.Label(
-            self.frame,
-            text = self.nameProject,
-            foreground = self.config.json_tema["font-geral"],
-            background = self.config.json_tema["bg-CorPrincipal"]
-        )
         self.label_folder = tk.Label(
             self.frameFolder,
             text = f"Folder/{self.nameProject}",
@@ -153,19 +179,15 @@ class ShowProjects(tk.Frame):
             pady = 5,
             padx = 5
         )
-        
-        self.label_NameProject.pack(
-            anchor = tk.NW,
-            side=tk.LEFT,
-            pady = 5,
-            padx = 5
-        )
+
         self.label_folder.pack(
             anchor = "w",
             side = "top"
             )
         
         self.asideDir()
+        self.PainelModels.show()
+        self.ToolsFunction()
         
     def close(self):
         self.master.show_home()

@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
-from source.Astro_ConfigManager import ConfigManager
+from dashboard.source.Astro_ConfigManager import ConfigManager
 
 class ShowConfig(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
-        self.config = ConfigManager()
+        self.config = ConfigManager(None)
 
         self.create_widgets()
 
