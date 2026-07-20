@@ -1,5 +1,4 @@
-from multiprocessing import Process, Queue
-from dashboard.main import Dashboard
+from dashboard.libTkinterPy.window_TK import Dashboard
 
 def run():
 

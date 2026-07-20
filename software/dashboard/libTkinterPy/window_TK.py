@@ -1,7 +1,7 @@
 import tkinter as tk
-from dashboard.windows.config import ShowConfig
-from dashboard.windows.Home import ShowHome
-from dashboard.windows.project import ShowProjects
+from dashboard.libTkinterPy.windows.config import ShowConfig
+from dashboard.libTkinterPy.windows.Home import ShowHome
+from dashboard.libTkinterPy.windows.project import ShowProjects
 
 class Dashboard(tk.Tk):
     def __init__(self):

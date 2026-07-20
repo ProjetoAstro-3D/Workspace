@@ -1,7 +1,7 @@
 import tkinter as tk
 import json
 from pathlib import Path
-from dashboard.source.upload import UploadModel
+from dashboard.libTkinterPy.source.upload import UploadModel
 from multiprocessing import Process, Queue
 from dashboard.libOpenGL.buildOpenGl import buildOpenGL
 
@@ -12,16 +12,22 @@ class PainelModels(tk.Frame):
         self.path = path
         self.upModels = UploadModel()
         self.controller = controller
-        self.queue = Queue()
+        self.queue_TK_OG = Queue()
+        self.queue_OG_TK = Queue()
 
     def runOpenGL(self):
-        print("1")
+        
+        self.ButtonTableSlicerAcess.config(state = tk.DISABLED)
         self.process = Process(
             target = buildOpenGL,
-            args = (self.queue,)
+            args = (self.queue_TK_OG, self.queue_OG_TK)
         )
         self.process.start()
-        
+
+    def active_button(self):
+
+        self.ButtonTableSlicerAcess.config(state = tk.ACTIVE)
+
     def Upload(self):
         arq = self.upModels.upload(self.pathModels)
 
@@ -80,13 +86,25 @@ class PainelModels(tk.Frame):
         ButtonUpload = tk.Button(self.layoutTitlerModelProj, text = "Upload", command= self.Upload)
         ButtonUpload.pack(side="right", padx = 15)
 
-        ButtonTableSlicerAcess = tk.Button(self.layoutBodySlicer, text = "[RENDER]", width = 10, height = 5, command=self.runOpenGL)
-        ButtonTableSlicerAcess.pack(side = "left", padx = 15, pady = 10)
+        self.ButtonTableSlicerAcess = tk.Button(self.layoutBodySlicer, text = "[RENDER]", width = 10, height = 5, command=self.runOpenGL)
+        self.ButtonTableSlicerAcess.pack(side = "left", padx = 15, pady = 10)
 
         ################################ FUNÇÕES #####################################
 
         self.listModels()
-        
+
+        self.verificar_queue()
+
+    def verificar_queue(self):
+
+        while not self.queue_OG_TK.empty():
+
+            msg = self.queue_OG_TK.get()
+
+            if msg["cmd"] == "close_openGL":
+                self.active_button()
+
+        self.after(100, self.verificar_queue)
 
     def listModels(self):
         for widget in self.LayoutListModels.winfo_children():

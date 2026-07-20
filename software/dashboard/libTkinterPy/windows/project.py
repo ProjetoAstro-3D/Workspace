@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from dashboard.source.Astro_ConfigManager import ConfigManager
-from dashboard.source.Astro_ReaderProjDir import ReaderDirP
-from dashboard.windows.frame.Workspace_config import PainelConfig
-from dashboard.windows.frame.Workspace_models import PainelModels
-from dashboard.windows.frame.Workspace_run import PainelRun   
+from dashboard.libTkinterPy.source.Astro_ConfigManager import ConfigManager
+from dashboard.libTkinterPy.source.Astro_ReaderProjDir import ReaderDirP
+from dashboard.libTkinterPy.windows.frame.Workspace_config import PainelConfig
+from dashboard.libTkinterPy.windows.frame.Workspace_models import PainelModels
+from dashboard.libTkinterPy.windows.frame.Workspace_run import PainelRun   
 
 class ShowProjects(tk.Frame):
     def __init__(self, master, name, path):

@@ -9,7 +9,7 @@ class Mesh():
         self.vertices = vertices
         self.indices = indices
         self.primitive = primitive
-        if self.primitive == GL_LINES:
+        if self.primitive == GL_LINES and num_componentes > 2:
             self.comp = num_componentes - 1
         self.stride = num_componentes * np.dtype(np.float32).itemsize
         self.vertex_count = len(vertices)
