@@ -1,19 +1,18 @@
 #version 330 core
 
-in vec2 TexCoord;
+in vec2 TexCoords;
+
+uniform sampler2D text;
+uniform vec3 textColor;
 
 out vec4 FragColor;
 
-uniform sampler2D text;
-
 void main()
 {
-    float alpha = texture(text, TexCoord).r;
+    float alpha = texture(text, TexCoords).r;
 
     FragColor = vec4(
-        1.0,
-        1.0,
-        1.0,
+        textColor,
         alpha
     );
 }

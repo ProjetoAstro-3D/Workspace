@@ -52,6 +52,7 @@ class CallWindow():
             )
             glfw.set_window_pos(self.window, x, y)
         else:
+            self.mode = glfw.get_video_mode(self.monitors[0])
             self.window = glfw.create_window(
                 800,
                 600,
@@ -96,9 +97,11 @@ class CallWindow():
         )
 
         self.but = Button(
-            [0.2,0.2],
-            [-0.5,-0.5],
-            "Teste"
+            [200,50],
+            [10,10],
+            "Teste",
+            [self.mode.size.width, self.mode.size.height],
+            None
         )
         self.but.set_widget()
 

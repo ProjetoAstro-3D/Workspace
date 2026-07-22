@@ -30,7 +30,8 @@ class Shader:
 
         self.program = self.__build()
 
-
+        print(glGetProgramInfoLog(self.program))
+        
 
     def sourceFS(self):
 
@@ -65,10 +66,20 @@ class Shader:
         )
 
 
-        return gls.compileProgram(
-            self.id_vertexS,
-            self.id_fragmentS
-        )
+        program = glCreateProgram()
+
+        glAttachShader(program, self.id_vertexS)
+        glAttachShader(program, self.id_fragmentS)
+
+        glLinkProgram(program)
+
+        status = glGetProgramiv(program, GL_LINK_STATUS)
+
+        print("LINK:", status)
+
+        print(glGetProgramInfoLog(program))
+
+        return program
 
 
     def use(self):
@@ -126,7 +137,6 @@ class Shader:
     def set_vec2(self, name, x, y):
 
         location = self.get_location(name)
-
         glUniform2f(
             location,
             x,

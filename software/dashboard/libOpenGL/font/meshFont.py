@@ -5,18 +5,17 @@ import ctypes
 
 class TextMesh:
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, window_width, window_height):
 
-        self.width = width
-        self.height = height
+        width = (2.0 * width) / window_width
+        height = (2.0 * height) / window_height
 
         self.vertices = np.array([
-            # posição      UV
-            0,      height, 0, 0,
-            0,      0,      0, 1,
-            width,  0,      1, 1,
-            width,  height, 1, 0
-
+            # posição       UV
+            [0.0,    0.0,      0.0, 1.0],
+            [0.0,    height,   0.0, 0.0],
+            [width,  height,   1.0, 0.0],
+            [width,  0.0,      1.0, 1.0],
         ], dtype=np.float32)
 
 
