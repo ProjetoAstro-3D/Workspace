@@ -159,7 +159,7 @@ class CallWindow:
         self.modelSTL = STLreader()
 
         self.modelSTL.load(
-            r"C:\Users\henri\OneDrive\Desktop\Rik2m6\Workspace\software\data\dev teste\craftModels\Models\organizer.stl"
+            self.queue_TK_OG.get()
         )
 
         self.ModelImport = Obj3D(

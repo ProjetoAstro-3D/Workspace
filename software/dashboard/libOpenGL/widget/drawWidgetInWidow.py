@@ -27,10 +27,15 @@ class Draw_widget:
 
         # valores do objeto
 
+        # valores do objeto
+
         self.rotate_x = 0
+        self.rotate_y = 0
+
         self.scale = 0.1
 
         self.position_x = 0
+        self.position_y = -50
         self.position_z = 0
 
 
@@ -49,52 +54,39 @@ class Draw_widget:
 
     def update_transform(self):
 
-        model = glm.mat4(1.0)
-
-
-        # escala padrão
-
-        model = glm.scale(
-            model,
-            glm.vec3(
-                self.scale,
-                self.scale,
-                self.scale
-            )
+        scale = glm.scale(
+            glm.mat4(1.0),
+            glm.vec3(self.scale)
         )
 
-
-        # rotação original do STL
-
-        model = glm.rotate(
-            model,
+        rot_stl = glm.rotate(
+            glm.mat4(1.0),
             glm.radians(180),
             glm.vec3(1,0,0)
         )
 
-
-        # rotação do usuário
-
-        model = glm.rotate(
-            model,
+        rot_x = glm.rotate(
+            glm.mat4(1.0),
             glm.radians(self.rotate_x),
+            glm.vec3(1,0,0)
+        )
+
+        rot_y = glm.rotate(
+            glm.mat4(1.0),
+            glm.radians(self.rotate_y),
             glm.vec3(0,1,0)
         )
 
-
-        # posição
-
-        model = glm.translate(
-            model,
+        trans = glm.translate(
+            glm.mat4(1.0),
             glm.vec3(
                 self.position_x,
-                -175,
+                self.position_y,
                 self.position_z
             )
         )
 
-
-        self.object.model_r = model
+        self.object.model_r = trans * rot_y * rot_x * rot_stl * scale
 
 
 
@@ -102,6 +94,30 @@ class Draw_widget:
     # ROTAÇÃO
     # =================================================
 
+    def rotate_y_ms(self):
+
+        if self.rotate_y < 360:
+
+            self.rotate_y += 45
+
+            self.update_transform()
+
+            self.text_valor_rotation_y.set_text(
+                str(self.rotate_y)
+            )
+
+
+    def rotate_y_mn(self):
+
+        if self.rotate_y > 0:
+
+            self.rotate_y -= 45
+
+            self.update_transform()
+
+            self.text_valor_rotation_y.set_text(
+                str(self.rotate_y)
+            )
 
     def rotate_x_ms(self):
 
@@ -140,7 +156,7 @@ class Draw_widget:
 
         if self.scale < 0.5:
 
-            self.scale += 0.02
+            self.scale += 0.01
 
             self.update_transform()
 
@@ -154,7 +170,7 @@ class Draw_widget:
 
         if self.scale > 0.1:
 
-            self.scale -= 0.02
+            self.scale -= 0.01
 
             self.update_transform()
 
@@ -168,12 +184,35 @@ class Draw_widget:
     # POSIÇÃO X
     # =================================================
 
+    def position_y_up(self):
 
+        if self.position_y < 800:
+
+            self.position_y += 5
+
+            self.update_transform()
+
+            self.text_valor_position_y.set_text(
+                str(self.position_y)
+            )
+
+
+    def position_y_down(self):
+
+        if self.position_y > -1000:
+
+            self.position_y -= 5
+
+            self.update_transform()
+
+            self.text_valor_position_y.set_text(
+                str(self.position_y)
+            )
     def position_x_up(self):
 
         if self.position_x < 800:
 
-            self.position_x += 200
+            self.position_x += 20
 
             self.update_transform()
 
@@ -187,7 +226,7 @@ class Draw_widget:
 
         if self.position_x > -1000:
 
-            self.position_x -= 200
+            self.position_x -= 20
 
             self.update_transform()
 
@@ -220,7 +259,7 @@ class Draw_widget:
 
         if self.position_z < 800:
 
-            self.position_z += 200
+            self.position_z += 20
 
             self.update_transform()
 
@@ -234,7 +273,7 @@ class Draw_widget:
 
         if self.position_z > -1000:
 
-            self.position_z -= 200
+            self.position_z -= 20
 
             self.update_transform()
 
@@ -287,18 +326,33 @@ class Draw_widget:
 
 
         # Y dos controles
-
         rotation_y = 0.32
         scale_y = 0.42
         position_x_y = 0.52
-        position_z_y = 0.62
+        position_y_y = 0.62
+        position_z_y = 0.72
+        rotation_y_y = 0.82
 
 
 
         # ==============================
         # ROTATION
         # ==============================
+        self.text_position_y = Text(
+            self.ui_size(0.20,0.04),
+            self.ui_pos(label_x,position_y_y),
+            "Position Y:",
+            [self.window_w,self.window_h],
+            16
+        )
 
+        self.text_valor_position_y = Text(
+            self.ui_size(0.05,0.03),
+            self.ui_pos(value_x,position_y_y),
+            str(self.position_y),
+            [self.window_w,self.window_h],
+            20
+        )
 
         self.text_rotation_x = Text(
             self.ui_size(0.20,0.04),
@@ -307,7 +361,21 @@ class Draw_widget:
             [self.window_w,self.window_h],
             16
         )
+        self.text_rotation_y = Text(
+            self.ui_size(0.20,0.04),
+            self.ui_pos(label_x,rotation_y_y),
+            "Rotation Y:",
+            [self.window_w,self.window_h],
+            16
+        )
 
+        self.text_valor_rotation_y = Text(
+            self.ui_size(0.05,0.03),
+            self.ui_pos(value_x,rotation_y_y),
+            "0",
+            [self.window_w,self.window_h],
+            20
+        )
 
         self.text_valor_rotation_x = Text(
             self.ui_size(0.05,0.03),
@@ -388,39 +456,80 @@ class Draw_widget:
             [self.window_w,self.window_h],
             20
         )
-
-
-
         self.texts.extend([
 
             self.text_visualizer,
             self.text_Parameter_options,
 
+            # Rotation X
             self.text_rotation_x,
             self.text_valor_rotation_x,
 
+            # Scale
             self.text_scale,
             self.text_valor_scale,
 
+            # Position X
             self.text_position_x,
             self.text_valor_position_x,
 
+            # Position Y
+            self.text_position_y,
+            self.text_valor_position_y,
+
+            # Position Z
             self.text_position_z,
-            self.text_valor_position_z
+            self.text_valor_position_z,
+
+            # Rotation Y
+            self.text_rotation_y,
+            self.text_valor_rotation_y
 
         ])
-
 
 
         # ==============================
         # BOTÕES
         # ==============================
-
-
         button_size = self.ui_size(
-            0.045,
-            0.045
+                    0.045,
+                    0.045
+                )
+        self.position_y_mn = Button(
+            button_size,
+            self.ui_pos(button_min_x,position_y_y),
+            "-",
+            [self.window_w,self.window_h],
+            self.position_y_down,
+            24
         )
+
+        self.position_y_ms = Button(
+            button_size,
+            self.ui_pos(button_max_x,position_y_y),
+            "+",
+            [self.window_w,self.window_h],
+            self.position_y_up,
+            24
+        )
+        self.rotate_y_mn_bt = Button(
+            button_size,
+            self.ui_pos(button_min_x,rotation_y_y),
+            "<",
+            [self.window_w,self.window_h],
+            self.rotate_y_mn,
+            24
+        )
+
+        self.rotate_y_ms_bt = Button(
+            button_size,
+            self.ui_pos(button_max_x,rotation_y_y),
+            ">",
+            [self.window_w,self.window_h],
+            self.rotate_y_ms,
+            24
+        )
+        
 
 
 
@@ -518,17 +627,29 @@ class Draw_widget:
 
         self.buttons.extend([
 
+            # Rotation X
             self.deg_x_mn,
             self.deg_x_ms,
 
+            # Scale
             self.scale_mn,
             self.scale_ms,
 
+            # Position X
             self.position_x_mn,
             self.position_x_ms,
 
+            # Position Y
+            self.position_y_mn,
+            self.position_y_ms,
+
+            # Position Z
             self.position_z_mn,
-            self.position_z_ms
+            self.position_z_ms,
+
+            # Rotation Y
+            self.rotate_y_mn_bt,
+            self.rotate_y_ms_bt
 
         ])
 

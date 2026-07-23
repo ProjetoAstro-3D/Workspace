@@ -5,13 +5,14 @@ from multiprocessing import Process, Queue
 
 from dashboard.libTkinterPy.source.upload import UploadModel
 from dashboard.libTkinterPy.source.Astro_ConfigManager import ConfigManager
+from dashboard.libTkinterPy.source.Astro_ReaderProjDir import ReaderDirP
 from dashboard.libOpenGL.buildOpenGl import buildOpenGL
 
 
 
 class PainelModels(tk.Frame):
 
-    def __init__(self, master, controller, path):
+    def __init__(self, master, controller, path, name):
 
         super().__init__(master)
 
@@ -24,15 +25,29 @@ class PainelModels(tk.Frame):
         self.queue_TK_OG = Queue()
         self.queue_OG_TK = Queue()
 
-        self.config = ConfigManager(False)
+        self.config = ConfigManager(name)
+        self.config_json_models = self.config.config_projDir
 
+        self.model = self.get_model()
 
+    def get_model(self):
+        config_path = f"{self.path}\config.json"
+        print(config_path)
 
+        with open(config_path, "r", encoding="utf-8") as file:
+            json_file = json.load(file)
+            if json_file["ModelsPath"]:
+                return json_file["ModelsPath"][0]
+
+        return 0
+    
     def runOpenGL(self):
 
         self.ButtonTableSlicerAcess.config(
             state=tk.DISABLED
         )
+
+        self.queue_TK_OG.put(self.model)
 
 
         self.process = Process(

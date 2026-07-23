@@ -31,7 +31,8 @@ class AstroBuilder:
                 "material": self._material,
                 "filament_diameter": self._filament_diameter,
                 "quality": self._quality,
-                "infill": self._infill
+                "infill": self._infill,
+                "ModelsPath": []
             }
             with open(os.path.join(self.__project_path, "config.json"), "w") as f:
                 json.dump(project_config, f, indent=4)

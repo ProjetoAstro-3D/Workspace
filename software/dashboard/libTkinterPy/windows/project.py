@@ -16,7 +16,7 @@ class ShowProjects(tk.Frame):
         
         self.frames()
         self.PainelConfig = PainelConfig(self.frameWorkspace, self)
-        self.PainelModels = PainelModels(self.frameWorkspace, self, path)
+        self.PainelModels = PainelModels(self.frameWorkspace, self, path, name)
         self.PainelRun = PainelRun(self.frameWorkspace)
 
         self.style.theme_use("clam")
