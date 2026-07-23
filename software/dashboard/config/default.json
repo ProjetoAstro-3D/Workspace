@@ -1,21 +1,27 @@
 {
     "geral": {
         "ImpressoraCad": "Default",
-        "Tema": "light"
+        "Tema": "astro"
     },
     "color": {
         "Tema": {
-            "light": {
-                "bg-CorPrincipal": "#ffffff",
-                "bg-CorSecundaria": "#ebebeb",
-                "font-geral": "#000000",
-                "botton": "#4d4dcb"
+            "astro": {
+                "bg-CorPrincipal": "#cbff00",
+                "bg-CorSecundaria": "#121212",
+                "font-geral": "#ffffff",
+                "botton": "#242424"
             },
             "dark": {
                 "bg-CorPrincipal": "#0f0f0f",
                 "bg-CorSecundaria": "#242424",
                 "font-geral": "#ffffff",
                 "botton": "#0d0d26"
+            },
+            "light": {
+                "bg-CorPrincipal": "#eeeeee",
+                "bg-CorSecundaria": "#ffffff",
+                "font-geral": "#111111",
+                "botton": "#dddddd"
             }
         }
     }

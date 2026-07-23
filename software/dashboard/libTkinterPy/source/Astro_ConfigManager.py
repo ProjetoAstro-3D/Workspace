@@ -49,22 +49,18 @@ class ConfigManager:
                 self.config_proj = json.load(read)
 
     def set_tema(self, tema):
-        
-        lastConfig = self.config
 
-        if lastConfig["geral"]["Tema"] == tema:
+        if self.config["geral"]["Tema"] == tema:
             return 0
-        
-        with open(f"{self.config_defaltDir}/default.json", "w") as file:
-            if lastConfig["geral"]["Tema"] != tema and lastConfig["geral"]["Tema"] == "light":   
-                lastConfig["geral"]["Tema"] = "dark"
-                json.dump(lastConfig, file, indent=4)
 
-            if lastConfig["geral"]["Tema"] != tema and lastConfig["geral"]["Tema"] == "dark":   
-                lastConfig["geral"]["Tema"] = "light"
-                json.dump(lastConfig, file, indent=4)
-        
+        self.config["geral"]["Tema"] = tema
+
+        with open(f"{self.config_defaltDir}/default.json", "w") as file:
+            json.dump(self.config, file, indent=4)
+
         self.__load()
+
+        return 1
 
     def set_name(self, name):
         if self.config_projDir != None:

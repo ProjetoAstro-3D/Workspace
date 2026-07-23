@@ -29,8 +29,6 @@ class Shader:
         self.fragment = self.sourceFS()
 
         self.program = self.__build()
-
-        print(glGetProgramInfoLog(self.program))
         
 
     def sourceFS(self):
@@ -74,10 +72,6 @@ class Shader:
         glLinkProgram(program)
 
         status = glGetProgramiv(program, GL_LINK_STATUS)
-
-        print("LINK:", status)
-
-        print(glGetProgramInfoLog(program))
 
         return program
 

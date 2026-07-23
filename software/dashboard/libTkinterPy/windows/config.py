@@ -36,7 +36,7 @@ class ShowConfig(tk.Frame):
         
         #Option menu:
         #Opções
-        list_Temas = ["light", "dark"]
+        list_Temas = ["light", "dark", "astro"]
         self.list_TemasDefault = tk.StringVar(self.frame_tema)
         self.list_TemasDefault.set(self.config.config["geral"]["Tema"])
 

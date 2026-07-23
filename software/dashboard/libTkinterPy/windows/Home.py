@@ -34,7 +34,7 @@ class ShowHome(tk.Frame):
         self.create_dashboardFolder()
 
         self.style_textTitle = ttk.Style()
-        self.style_textTitle.configure("Titulo.TLabel", foreground="#388eff", background = self.config.json_tema["bg-CorSecundaria"])
+        self.style_textTitle.configure("Titulo.TLabel", foreground="#cbff00", background = self.config.json_tema["bg-CorSecundaria"])
 
         # Add a label to the dashboard.aside
         self.label = ttk.Label(

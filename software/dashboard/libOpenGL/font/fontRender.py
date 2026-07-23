@@ -14,7 +14,7 @@ class Character:
 
 class FontRenderer:
 
-    def __init__(self):
+    def __init__(self, font):
 
         self.base = os.path.dirname(__file__)
 
@@ -24,7 +24,7 @@ class FontRenderer:
         )
 
         self.face = freetype.Face(self.path_font)
-        self.face.set_pixel_sizes(0, 48)
+        self.face.set_pixel_sizes(0, font)
 
         self.characters = {}
 

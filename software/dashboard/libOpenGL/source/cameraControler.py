@@ -1,33 +1,40 @@
 import glfw
 
+
 class Cam_Controler:
 
     def __init__(self, window, cam):
+
         self.window = window
         self.cam = cam
 
         self.rotating = False
-        self.last_x = 0
-        self.last_y = 0
 
-        glfw.set_cursor_pos_callback(window, self.cursor_callback)
-        glfw.set_mouse_button_callback(window, self.mouse_callback)
+        self.last_x = 0.0
+        self.last_y = 0.0
 
+    # ==========================================
+    # CALLBACK DO BOTÃO DO MOUSE
+    # ==========================================
 
-    def mouse_callback(self, window, button, action, mods):
+    def mouse_button_callback(self, window, button, action, mods):
 
-        if button == glfw.MOUSE_BUTTON_LEFT:
+        if button != glfw.MOUSE_BUTTON_LEFT:
+            return
 
-            if action == glfw.PRESS:
-                self.rotating = True
+        if action == glfw.PRESS:
 
-                x, y = glfw.get_cursor_pos(window)
-                self.last_x = x
-                self.last_y = y
+            self.rotating = True
 
-            elif action == glfw.RELEASE:
-                self.rotating = False
+            self.last_x, self.last_y = glfw.get_cursor_pos(window)
 
+        elif action == glfw.RELEASE:
+
+            self.rotating = False
+
+    # ==========================================
+    # CALLBACK DO MOVIMENTO DO MOUSE
+    # ==========================================
 
     def cursor_callback(self, window, xpos, ypos):
 
@@ -42,9 +49,13 @@ class Cam_Controler:
 
         self.cam.rotate(dx, dy)
 
+    # ==========================================
+    # TECLADO
+    # ==========================================
+
     def process_input(self):
 
-        zoom_speed = 0.1
+        zoom_speed = 0.3
 
         if glfw.get_key(self.window, glfw.KEY_EQUAL) == glfw.PRESS:
             self.cam.zoom(-zoom_speed)

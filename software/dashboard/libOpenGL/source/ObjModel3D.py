@@ -13,6 +13,7 @@ class Obj3D():
         self.mesh.normal(self.STLreader.normals)
         self.object = Object3D(self.mesh, self.shader)
         self.model_r = glm.mat4(1.0)
+        self.rotation_x = 0
                 # Escalar a peça
         self.model_r = glm.scale(
             self.model_r,
